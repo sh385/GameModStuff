@@ -26,7 +26,7 @@ protected:
 	bool				UpdateFlashlight	( void );
 	void				Flashlight			( bool on );
 
-private:
+public: //private
 
 	stateResult_t		State_Idle			( const stateParms_t& parms );
 	stateResult_t		State_Fire			( const stateParms_t& parms );
@@ -37,14 +37,14 @@ private:
 };
 
 CLASS_DECLARATION( rvWeapon, rvWeaponMachinegun )
-END_CLASS
+	END_CLASS
 
-/*
-================
-rvWeaponMachinegun::rvWeaponMachinegun
-================
-*/
-rvWeaponMachinegun::rvWeaponMachinegun ( void ) {
+	/*
+	================
+	rvWeaponMachinegun::rvWeaponMachinegun
+	================
+	*/
+	rvWeaponMachinegun::rvWeaponMachinegun ( void ) {
 }
 
 /*
@@ -55,9 +55,9 @@ rvWeaponMachinegun::Spawn
 void rvWeaponMachinegun::Spawn ( void ) {
 	spreadZoom = spawnArgs.GetFloat ( "spreadZoom" );
 	fireHeld   = false;
-		
+
 	SetState ( "Raise", 0 );	
-	
+
 	Flashlight ( owner->IsFlashlightOn() );
 }
 
@@ -120,7 +120,7 @@ bool rvWeaponMachinegun::UpdateFlashlight ( void ) {
 	if ( !wsfl.flashlight ) {
 		return false;
 	}
-	
+
 	SetState ( "Flashlight", 0 );
 	return true;		
 }
@@ -132,7 +132,7 @@ rvWeaponMachinegun::Flashlight
 */
 void rvWeaponMachinegun::Flashlight ( bool on ) {
 	owner->Flashlight ( on );
-	
+
 	if ( on ) {
 		viewModel->ShowSurface ( "models/weapons/blaster/flare" );
 		worldModel->ShowSurface ( "models/weapons/blaster/flare" );
@@ -145,7 +145,7 @@ void rvWeaponMachinegun::Flashlight ( bool on ) {
 /*
 ===============================================================================
 
-	States 
+States 
 
 ===============================================================================
 */
@@ -155,29 +155,30 @@ CLASS_STATES_DECLARATION ( rvWeaponMachinegun )
 	STATE ( "Fire",				rvWeaponMachinegun::State_Fire )
 	STATE ( "Reload",			rvWeaponMachinegun::State_Reload )
 	STATE ( "Flashlight",		rvWeaponMachinegun::State_Flashlight )
-END_CLASS_STATES
+	END_CLASS_STATES
 
-/*
-================
-rvWeaponMachinegun::State_Idle
-================
-*/
-stateResult_t rvWeaponMachinegun::State_Idle( const stateParms_t& parms ) {
-	enum {
-		STAGE_INIT,
-		STAGE_WAIT,
-	};	
-	switch ( parms.stage ) {
+	/*
+	================
+	rvWeaponMachinegun::State_Idle
+	================
+	*/
+
+	stateResult_t rvWeaponMachinegun::State_Idle( const stateParms_t& parms ) {
+		enum {
+			STAGE_INIT,
+			STAGE_WAIT,
+		};	
+		switch ( parms.stage ) {
 		case STAGE_INIT:
 			if ( !AmmoAvailable ( ) ) {
 				SetStatus ( WP_OUTOFAMMO );
 			} else {
 				SetStatus ( WP_READY );
 			}
-		
+
 			PlayCycle( ANIMCHANNEL_ALL, "idle", parms.blendFrames );
 			return SRESULT_STAGE ( STAGE_WAIT );
-		
+
 		case STAGE_WAIT:			
 			if ( wsfl.lowerWeapon ) {
 				SetState ( "Lower", 4 );
@@ -210,8 +211,8 @@ stateResult_t rvWeaponMachinegun::State_Idle( const stateParms_t& parms ) {
 				}				
 			}
 			return SRESULT_WAIT;
-	}
-	return SRESULT_ERROR;
+		}
+		return SRESULT_ERROR;
 }
 
 /*
@@ -220,36 +221,39 @@ rvWeaponMachinegun::State_Fire
 ================
 */
 stateResult_t rvWeaponMachinegun::State_Fire ( const stateParms_t& parms ) {
+
+	
 	enum {
 		STAGE_INIT,
 		STAGE_WAIT,
 	};	
 	switch ( parms.stage ) {
-		case STAGE_INIT:
-			if ( wsfl.zoom ) {
-				nextAttackTime = gameLocal.time + (altFireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
-				Attack ( true, 1, spreadZoom, 0, 1.0f );
-				fireHeld = true;
-			} else {
-				nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
-				Attack ( false, 1, spread, 0, 1.0f );
-			}
-			PlayAnim ( ANIMCHANNEL_ALL, "fire", 0 );	
-			return SRESULT_STAGE ( STAGE_WAIT );
-	
-		case STAGE_WAIT:		
-			if ( !fireHeld && wsfl.attack && gameLocal.time >= nextAttackTime && AmmoInClip() && !wsfl.lowerWeapon ) {
-				SetState ( "Fire", 0 );
-				return SRESULT_DONE;
-			}
-			if ( AnimDone ( ANIMCHANNEL_ALL, 0 ) ) {
-				SetState ( "Idle", 0 );
-				return SRESULT_DONE;
-			}		
-			if ( UpdateFlashlight ( ) ) {
-				return SRESULT_DONE;
-			}			
-			return SRESULT_WAIT;
+	case STAGE_INIT:
+		if ( wsfl.zoom ) {
+			nextAttackTime = gameLocal.time + (altFireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
+			Attack ( true, 1, spreadZoom, 0, 1.0f );
+			fireHeld = true;
+		} else {
+			nextAttackTime = gameLocal.time + (fireRate * owner->PowerUpModifier ( PMOD_FIRERATE ));
+			Attack ( false, 1, spread, 0, 1.0f );
+		}
+		PlayAnim ( ANIMCHANNEL_ALL, "fire", 0 );	
+		return SRESULT_STAGE ( STAGE_WAIT );
+		
+
+	case STAGE_WAIT:		
+		if ( !fireHeld && wsfl.attack && gameLocal.time >= nextAttackTime && AmmoInClip() && !wsfl.lowerWeapon ) {
+			SetState ( "Fire", 0 );
+			return SRESULT_DONE;
+		}
+		if ( AnimDone ( ANIMCHANNEL_ALL, 0 ) ) {
+			SetState ( "Idle", 0 );
+			return SRESULT_DONE;
+		}		
+		if ( UpdateFlashlight ( ) ) {
+			return SRESULT_DONE;
+		}			
+		return SRESULT_WAIT;
 	}
 	return SRESULT_ERROR;
 }
@@ -265,32 +269,32 @@ stateResult_t rvWeaponMachinegun::State_Reload ( const stateParms_t& parms ) {
 		STAGE_WAIT,
 	};	
 	switch ( parms.stage ) {
-		case STAGE_INIT:
-			if ( wsfl.netReload ) {
-				wsfl.netReload = false;
-			} else {
-				NetReload ( );
-			}
-			
-			SetStatus ( WP_RELOAD );
-			PlayAnim ( ANIMCHANNEL_ALL, "reload", parms.blendFrames );
-			return SRESULT_STAGE ( STAGE_WAIT );
-			
-		case STAGE_WAIT:
-			if ( AnimDone ( ANIMCHANNEL_ALL, 4 ) ) {
-				AddToClip ( ClipSize() );
-				SetState ( "Idle", 4 );
-				return SRESULT_DONE;
-			}
-			if ( wsfl.lowerWeapon ) {
-				SetState ( "Lower", 4 );
-				return SRESULT_DONE;
-			}
-			return SRESULT_WAIT;
+	case STAGE_INIT:
+		if ( wsfl.netReload ) {
+			wsfl.netReload = false;
+		} else {
+			NetReload ( );
+		}
+
+		SetStatus ( WP_RELOAD );
+		PlayAnim ( ANIMCHANNEL_ALL, "reload", parms.blendFrames );
+		return SRESULT_STAGE ( STAGE_WAIT );
+
+	case STAGE_WAIT:
+		if ( AnimDone ( ANIMCHANNEL_ALL, 4 ) ) {
+			AddToClip ( ClipSize() );
+			SetState ( "Idle", 4 );
+			return SRESULT_DONE;
+		}
+		if ( wsfl.lowerWeapon ) {
+			SetState ( "Lower", 4 );
+			return SRESULT_DONE;
+		}
+		return SRESULT_WAIT;
 	}
 	return SRESULT_ERROR;
 }
-			
+
 
 /*
 ================
@@ -303,25 +307,25 @@ stateResult_t rvWeaponMachinegun::State_Flashlight ( const stateParms_t& parms )
 		FLASHLIGHT_WAIT,
 	};	
 	switch ( parms.stage ) {
-		case FLASHLIGHT_INIT:			
-			SetStatus ( WP_FLASHLIGHT );
-			// Wait for the flashlight anim to play		
-			PlayAnim( ANIMCHANNEL_ALL, "flashlight", 0 );
-			return SRESULT_STAGE ( FLASHLIGHT_WAIT );
-			
-		case FLASHLIGHT_WAIT:
-			if ( !AnimDone ( ANIMCHANNEL_ALL, 4 ) ) {
-				return SRESULT_WAIT;
-			}
-			
-			if ( owner->IsFlashlightOn() ) {
-				Flashlight ( false );
-			} else {
-				Flashlight ( true );
-			}
-			
-			SetState ( "Idle", 4 );
-			return SRESULT_DONE;
+	case FLASHLIGHT_INIT:			
+		SetStatus ( WP_FLASHLIGHT );
+		// Wait for the flashlight anim to play		
+		PlayAnim( ANIMCHANNEL_ALL, "flashlight", 0 );
+		return SRESULT_STAGE ( FLASHLIGHT_WAIT );
+
+	case FLASHLIGHT_WAIT:
+		if ( !AnimDone ( ANIMCHANNEL_ALL, 4 ) ) {
+			return SRESULT_WAIT;
+		}
+
+		if ( owner->IsFlashlightOn() ) {
+			Flashlight ( false );
+		} else {
+			Flashlight ( true );
+		}
+
+		SetState ( "Idle", 4 );
+		return SRESULT_DONE;
 	}
 	return SRESULT_ERROR;
 }

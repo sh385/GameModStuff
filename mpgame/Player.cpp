@@ -4274,6 +4274,13 @@ bool idPlayer::GiveItem( idItem *item ) {
 		return false;
 	}
 
+	/*if (gameLocal.mpGame.GetScore(gameLocal.GetLocalPlayer()) < 20)//sh385
+	{
+		return false;
+	}
+
+	gameLocal.mpGame.AddPlayerScore(gameLocal.GetLocalPlayer(), -20); //sh385*/
+
 	item->GetAttributes( attr );
 
 	if( gameLocal.isServer || !gameLocal.isMultiplayer ) {
@@ -5222,10 +5229,19 @@ bool idPlayer::GiveInventoryItem( idDict *item ) {
 		return false;
 	}
 
+	/*if (gameLocal.mpGame.GetScore(gameLocal.GetLocalPlayer()) < 30) //sh385
+	{
+		return false;
+	}
+
+	gameLocal.mpGame.AddPlayerScore(gameLocal.GetLocalPlayer(), -30); //sh385*/
+	
+
 // RAVEN BEGIN
 // mwhitlock: Dynamic memory consolidation
 	RV_PUSH_HEAP_MEM(this);
 // RAVEN END
+	
 	inventory.items.Append( new idDict( *item ) );
 // RAVEN BEGIN
 // mwhitlock: Dynamic memory consolidation
@@ -8967,8 +8983,8 @@ void idPlayer::Move( void ) {
 	pushVelocity = physicsObj.GetPushedLinearVelocity();
 
 	// set physics variables
-	physicsObj.SetMaxStepHeight( pm_stepsize.GetFloat() );
-	physicsObj.SetMaxJumpHeight( pm_jumpheight.GetFloat() );
+	physicsObj.SetMaxStepHeight(pm_stepsize.GetFloat());
+	physicsObj.SetMaxJumpHeight(pm_jumpheight.GetFloat());
 
 	if ( noclip ) {
 		physicsObj.SetContents( 0 );

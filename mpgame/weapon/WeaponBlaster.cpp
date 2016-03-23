@@ -26,7 +26,7 @@ protected:
 	void				Flashlight			( bool on );
 
 private:
-
+	int					launchFromBarrel; //sh385
 	int					chargeTime;
 	int					chargeDelay;
 	idVec2				chargeGlow;
@@ -152,6 +152,7 @@ void rvWeaponBlaster::Spawn ( void ) {
 	chargeGlow   = spawnArgs.GetVec2 ( "chargeGlow" );
 	chargeTime   = SEC2MS ( spawnArgs.GetFloat ( "chargeTime" ) );
 	chargeDelay  = SEC2MS ( spawnArgs.GetFloat ( "chargeDelay" ) );
+	launchFromBarrel = spawnArgs.GetInt("launchFromBarrel"); //sh385 added
 
 	fireHeldTime		= 0;
 	fireForced			= false;
@@ -427,11 +428,11 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 
 	
 			if ( gameLocal.time - fireHeldTime > chargeTime ) {	
-				Attack ( true, 1, spread, 0, 1.0f );
+				Attack ( true, 1, spread, 0, 1.0f ); 
 				PlayEffect ( "fx_chargedflash", barrelJointView, false );
 				PlayAnim( ANIMCHANNEL_ALL, "chargedfire", parms.blendFrames );
 			} else {
-				Attack ( false, 1, spread, 0, 1.0f );
+				Attack ( false, launchFromBarrel, spread, 0, 1.0f ); //sh385 launchFromBarrel was 1
 				PlayEffect ( "fx_normalflash", barrelJointView, false );
 				PlayAnim( ANIMCHANNEL_ALL, "fire", parms.blendFrames );
 			}

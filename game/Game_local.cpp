@@ -3456,7 +3456,7 @@ idGameLocal::RunFrame
 */
 // RAVEN BEGIN
  gameReturn_t idGameLocal::RunFrame( const usercmd_t *clientCmds, int activeEditors, bool lastCatchupFrame, int serverGameFrame ) {
-	idEntity *	ent;
+	
 	int			num;
 	float		ms;
 	idTimer		timer_think, timer_events, timer_singlethink;
@@ -3476,7 +3476,7 @@ idGameLocal::RunFrame
 
 		// set the user commands for this frame
 		usercmds = clientCmds;
-
+		
 		if ( player ) {
 			// ddynerman: save the current thinking entity for instance-dependent
 			currentThinkingEntity = player;

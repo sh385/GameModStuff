@@ -5150,7 +5150,6 @@ void idMultiplayerGame::UpdateHud( idUserInterface* _mphud ) {
 		_mphud->SetStateBool("IsLagged", false);
 	}
 //RAVEN END
-
 	_mphud->SetStateInt( "marine_score", teamScore[ TEAM_MARINE ] );
 	_mphud->SetStateInt( "strogg_score", teamScore[ TEAM_STROGG ] );
 
@@ -5206,6 +5205,11 @@ void idMultiplayerGame::UpdateHud( idUserInterface* _mphud ) {
 	_mphud->SetStateBool( "infinity", ( !timeLimit && !inCountdownState ) || inNonTimedState );
 
 	if( gameLocal.gameType == GAME_DM ) {
+		if (gameLocal.roundCountdown > 0) //sh385
+		{
+			_mphud->SetStateInt( "round_countdown", gameLocal.roundCountdown); //sh385
+		}
+		_mphud->SetStateInt( "round_number", gameLocal.roundNumber); //sh385
 		if( rankedPlayers.Num() ) {
 			_mphud->SetStateString( "player1_name", rankedPlayers[ 0 ].First()->GetUserInfo()->GetString( "ui_name" ) );
 			_mphud->SetStateString( "player1_score", va( "%d", GetScore( rankedPlayers[ 0 ].First() ) ) );

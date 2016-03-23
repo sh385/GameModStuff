@@ -402,6 +402,15 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 		FIRE_INIT,
 		FIRE_WAIT,
 	};	
+	const char *key, *value;
+	int			i;
+	float		yaw;
+	idVec3		org;
+	idPlayer	*player;
+	idDict		dict;
+	idEntity *newEnt = NULL;
+
+	
 	switch ( parms.stage ) {
 		case FIRE_INIT:	
 
@@ -427,12 +436,12 @@ stateResult_t rvWeaponBlaster::State_Fire ( const stateParms_t& parms ) {
 
 	
 			if ( gameLocal.time - fireHeldTime > chargeTime ) {	
-				Attack ( true, 30, spread*10, 0, 1.0f );
+				Attack ( true, 3, spread, 0, 1.0f );					//num_attacks changed to 3 and spread changed
 				PlayEffect ( "fx_chargedflash", barrelJointView, false );
 				PlayAnim( ANIMCHANNEL_ALL, "chargedfire", parms.blendFrames );
 			} else {
 				Attack ( false, 1, spread, 0, 1.0f );
-				PlayEffect ( "fx_normalflash", barrelJointView, false );
+				PlayEffect ( "fx_chargedflash", barrelJointView, false ); //changed from fx_normalflash
 				PlayAnim( ANIMCHANNEL_ALL, "fire", parms.blendFrames );
 			}
 			fireHeldTime = 0;
