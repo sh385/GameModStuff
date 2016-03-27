@@ -309,6 +309,14 @@ public:
 	void			AddChatLine( const char *fmt, ... ) id_attribute((format(printf,2,3)));
 	void			PrintChatLine( const char *message, const bool teamChat );
 
+	float					shTime;//sh385
+	int						monsterCount;//sh385
+	int						maxMonsters;//sh385
+	int						roundNumber;//sh385
+	int						deadMonsters;//sh385
+	int						roundDelay;//sh385
+	int						roundCountdown;//sh385
+	
 // RITUAL BEGIN
 // squirrel: Mode-agnostic buymenus
 	void			OnBuyModeTeamVictory( int winningTeam );

@@ -1203,7 +1203,6 @@ void idAI::Think( void ) {
 
 			// run all movement commands
 			Move();
-
 			// if not dead, chatter and blink
 			if( move.moveType != MOVETYPE_DEAD ){
 				UpdateChatter();
@@ -1626,7 +1625,7 @@ void idAI::Killed( idEntity *inflictor, idEntity *attacker, int damage, const id
 	}
 	idPlayer *player = gameLocal.GetLocalPlayer(); //sh385
 	gameLocal.mpGame.AddPlayerScore(player, 10); //sh385
-	gameLocal.deadMonsters+=1; //sh385
+	gameLocal.mpGame.deadMonsters+=1; //sh385
 
 	aifl.dead = true;
 
@@ -2783,7 +2782,6 @@ bool idAI::AttackMelee ( const char *attackName, const idDict* meleeDict ) {
 	idEntity*				enemyEnt = enemy.ent;
 	const char*				p;
 	const idSoundShader*	shader;
-
 	if ( !enemyEnt ) {
 		p = meleeDict->GetString( "snd_miss" );
 		if ( p && *p ) {

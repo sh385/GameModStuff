@@ -777,7 +777,7 @@ void idEntity::Save( idSaveGame *savefile ) const {
 
 	savefile->Write( &fl, sizeof( fl ) );
 
-	savefile->WriteRenderEntity( renderEntity );
+	savefile->WriteRenderEntity( renderEntity); 
 	savefile->WriteInt( modelDefHandle );
 	savefile->WriteRefSound( refSound );
 
@@ -986,7 +986,7 @@ const char * idEntity::GetName( void ) const {
 
 /*
 ================
-idEntity::Think
+idEntity::
 ================
 */
 void idEntity::Think( void ) {

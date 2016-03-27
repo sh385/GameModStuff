@@ -3,7 +3,7 @@
 
 #include "../Game_local.h"
 #include "../Weapon.h"
-
+#include "../Projectile.h"
 class rvWeaponGauntlet : public rvWeapon {
 public:
 
@@ -218,7 +218,7 @@ void rvWeaponGauntlet::Attack ( void ) {
 							MASK_SHOT_RENDERMODEL, owner );
 // RAVEN END
 	owner->WeaponFireFeedback( &weaponDef->dict );
-
+	
 	if ( tr.fraction >= 1.0f ) {
 		if ( impactEffect ) {
 			impactEffect->Stop ( );
@@ -282,10 +282,13 @@ void rvWeaponGauntlet::Attack ( void ) {
 	// Do damage?
 	if ( gameLocal.time > nextAttackTime ) {					
 		if ( ent ) {
+			
 			if ( ent->fl.takedamage ) {
 				float dmgScale = 1.0f;
 				dmgScale *= owner->PowerUpModifier( PMOD_MELEE_DAMAGE );
 				ent->Damage ( owner, owner, playerViewAxis[0], spawnArgs.GetString ( "def_damage" ), dmgScale, 0 );
+				idDict& dict = attackDict; //sh385
+				LaunchProjectiles(dict, this->viewModelOrigin, this->viewModelAxis, 1, 0, 0, 1.0f);//sh385
 				StartSound( "snd_hit", SND_CHANNEL_ANY, 0, false, NULL );
 				if ( ent->spawnArgs.GetBool( "bleed" ) ) {
 					PlayLoopSound( LOOP_FLESH );
@@ -468,6 +471,8 @@ stateResult_t rvWeaponGauntlet::State_Fire( const stateParms_t& parms ) {
 		STAGE_END,
 		STAGE_END_WAIT
 	};	
+	idPlayer* player = gameLocal.GetLocalPlayer();  //sh385
+	player->GivePowerUp(1, 1); //sh385
 	switch ( parms.stage ) {
 		case STAGE_START:	
 			PlayAnim( ANIMCHANNEL_ALL, "attack_start", parms.blendFrames );

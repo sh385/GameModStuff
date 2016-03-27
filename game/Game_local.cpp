@@ -542,6 +542,7 @@ void idGameLocal::Init( void ) {
 		aas = idAAS::Alloc();
 		aasList.Append( aas );
 		aasNames.Append( kv->GetValue() );
+		Printf(kv->GetValue()); //sh385
 		kv = dict->MatchPrefix( "type", kv );
 	}
 

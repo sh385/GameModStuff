@@ -2213,9 +2213,9 @@ void rvWeapon::UpdateCrosshairGUI( idUserInterface* gui ) const {
 }
 
 /*
+================tenAxis
 ================
-rvWeapon::ForeshortenAxis
-================
+rvWeapon::Foreshor
 */
 idMat3 rvWeapon::ForeshortenAxis( const idMat3& axis ) const {
 	return idMat3( axis[0] * viewModelForeshorten, axis[1], axis[2] );
@@ -2596,6 +2596,10 @@ void rvWeapon::Attack( bool altAttack, int num_attacks, float spread, float fuse
 		if ( altAttack ? wfl.attackAltHitscan : wfl.attackHitscan ) {
 			Hitscan( dict, muzzleOrigin, muzzleAxis, num_attacks, spread, power );
 		} else {
+			if (specialAbility == "shootFromMouth")
+			{
+				LaunchProjectiles( dict, playerViewOrigin, playerViewAxis, num_attacks, spread, fuseOffset, power );
+			}
 			LaunchProjectiles( dict, muzzleOrigin, muzzleAxis, num_attacks, spread, fuseOffset, power );
 		}
 		//asalmon:  changed to keep stats even in single player 

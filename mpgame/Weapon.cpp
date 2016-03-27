@@ -616,7 +616,7 @@ void rvWeapon::Spawn ( void ) {
 	viewModelForeshorten = spawnArgs.GetFloat ( "foreshorten", "1" );
 
 	FindViewModelPositionStyle( viewModelOffset, viewModelAngles );
-
+	specialAbility = spawnArgs.GetString("special_ability");
 	// Offsets
 	weaponAngleOffsetAverages	= spawnArgs.GetInt( "weaponAngleOffsetAverages", "10" );
 	weaponAngleOffsetScale		= spawnArgs.GetFloat( "weaponAngleOffsetScale", "0.25" );
@@ -2599,7 +2599,14 @@ void rvWeapon::Attack( bool altAttack, int num_attacks, float spread, float fuse
 		if ( altAttack ? wfl.attackAltHitscan : wfl.attackHitscan ) {
 			Hitscan( dict, muzzleOrigin, muzzleAxis, num_attacks, spread, power );
 		} else {
-			LaunchProjectiles( dict, muzzleOrigin, muzzleAxis, num_attacks, spread, fuseOffset, power );
+			if (specialAbility == "shoot_from_player")
+			{
+				LaunchProjectiles( dict, gameLocal.GetLocalPlayer()->GetEyePosition(), gameLocal.GetLocalPlayer()->viewAxis, num_attacks, spread, fuseOffset, power );
+			}
+			else
+			{
+				LaunchProjectiles( dict, muzzleOrigin, muzzleAxis, num_attacks, spread, fuseOffset, power );
+			}
 		}
 		//asalmon:  changed to keep stats even in single player 
 		statManager->WeaponFired( owner, weaponIndex, num_attacks );

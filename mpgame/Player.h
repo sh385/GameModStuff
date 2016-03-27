@@ -292,7 +292,7 @@ public:
 	bool					godmode;
 	int						godmodeDamage;
 	bool					undying;
-
+	idPhysics_Player		physicsObj;			// player physics sh385
 	bool					spawnAnglesSet;		// on first usercmd, we must set deltaAngles
 	idAngles				spawnAngles;
 	idAngles				viewAngles;			// player view angles
@@ -784,8 +784,6 @@ private:
 	jointHandle_t			hipJoint;
 	jointHandle_t			chestJoint;
 	jointHandle_t			neckLeanJoint;
-
-	idPhysics_Player		physicsObj;			// player physics
 
  	idList<aasLocation_t>	aasLocation;		// for AI tracking the player
 

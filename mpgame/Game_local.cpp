@@ -426,7 +426,7 @@ extern idHashTable<rvViseme> *visemeTable66;
 extern idHashTable<rvViseme> *visemeTable33;
 #ifdef RV_UNIFIED_ALLOCATOR
 void idGameLocal::Init( void *(*allocator)(size_t size), void (*deallocator)( void *ptr ), size_t (*msize)(void *ptr) ) {
-	roundNumber = 1;//sh385
+
 #else
 void idGameLocal::Init( void ) {
 #endif
@@ -3596,14 +3596,6 @@ idGameLocal::RunFrame
 */
 // RAVEN BEGIN
 gameReturn_t idGameLocal::RunFrame( const usercmd_t *clientCmds, int activeEditors, bool lastCatchupFrame, int serverGameFrame ) {
-	int			spawnPoint;//sh385
-	const char *key, *value;//sh385
-	int			i = 0;//sh385
-	float		yaw = 0.0;//sh385
-	idVec3		org;//sh385
-	idDict		dict;//sh385
-	idEntity *newEnt = NULL;//sh385
-	maxMonsters = roundNumber*10;//sh385
 
 	idEntity *	ent;
 	int			num;
@@ -3647,73 +3639,7 @@ gameReturn_t idGameLocal::RunFrame( const usercmd_t *clientCmds, int activeEdito
 
 		realClientTime = time;
 		{
-		shTime += (time - previousTime);//sh385
-		if (shTime >= 5000)//sh385
-		{
-			if (monsterCount < maxMonsters)//sh385
-			{
-				spawnPoint = random.RandomInt(6) + 1;
-				player = gameLocal.GetLocalPlayer();
-
-				value = "monster_grunt";
-				dict.Set( "classname", value );
-
-				switch(spawnPoint) //sh385
-				{
-				case 1:
-					yaw = 134.2;
-					org = idVec3(784.97, -176.97, -155.75);
-					break;
-
-				case 2:
-					yaw = 84.2;
-					org = idVec3(166.27, -656.96, 68.25);
-					break;
-
-				case 3:
-					yaw = 67.0;
-					org = idVec3(-906.06, -531.84, 68.25);
-					break;
-
-				case 4:
-					yaw = 167.8;
-					org = idVec3(-54.02, -197.46, 164.25);
-					break;
-
-				case 5:
-					yaw = 265.2;
-					org = idVec3(-722.1, 360.77, 164.25);
-					break;
-
-				case 6:
-					yaw = 339.6;
-					org = idVec3(-428.61, 916.11, 196.25);
-					break;
-
-				case 7:
-					yaw = 279.1;
-					org = idVec3(510.13, 968.87, 164.25);
-					break;
-				}
-				
-				dict.Set( "angle", va( "%f", yaw ) );
-				dict.Set( "origin", org.ToString() ); 
-				gameLocal.SpawnEntityDef( dict, &newEnt );
-				monsterCount++; 
-			}
-			shTime = 0.0;
-		}
-		if (deadMonsters >= maxMonsters) //sh385
-		{
-			roundDelay += (time - previousTime); 
-			if (roundDelay >= 5000) //sh385
-			{
-				roundNumber += 1; 
-				monsterCount = 0; 
-				deadMonsters = 0;
-				roundDelay = 0;
-			}
-		}
+		
 TIME_THIS_SCOPE("idGameLocal::RunFrame - gameDebug.BeginFrame()");
 		// bdube: added advanced debug support
 		gameDebug.BeginFrame( );
@@ -3905,6 +3831,7 @@ TIME_THIS_SCOPE("idGameLocal::RunFrame - gameDebug.BeginFrame()");
 		if ( isMultiplayer ) {
 			mpGame.Run();
 		}
+		
 
 		// free the player pvs
 		FreePlayerPVS();

@@ -2745,7 +2745,6 @@ Find a spawn point marked, otherwise use normal spawn selection.
 bool idPlayer::SelectSpawnPoint( idVec3 &origin, idAngles &angles ) {
 	idEntity *spot;
 	idStr skin;
-
 	spot = gameLocal.SelectSpawnPoint( this );
 
 	// no spot, try again next frame
@@ -4407,7 +4406,7 @@ float idPlayer::PowerUpModifier( int type ) {
 	if ( PowerUpActive( POWERUP_HASTE ) ) {
 		switch ( type ) {
 			case PMOD_SPEED:	
-				mod *= 1.3f;
+				mod *= 6.0f;
 				break;
 
 			case PMOD_FIRERATE:
@@ -9778,7 +9777,7 @@ void idPlayer::Killed( idEntity *inflictor, idEntity *attacker, int damage, cons
 		pfl.pain = true;
 		return;
 	}
-
+	gameLocal.mpGame.roundNumber = 1; //sh385
 // squirrel: Mode-agnostic buymenus
 	if ( gameLocal.isMultiplayer ) {
 		if ( gameLocal.mpGame.IsBuyingAllowedInTheCurrentGameMode() ) {
@@ -11490,10 +11489,10 @@ void idPlayer::Event_SelectWeapon( const char *weaponName ) {
 	int i;
 	int weaponNum;
 
-	if ( gameLocal.isClient ) {
- 		gameLocal.Warning( "Cannot switch weapons from script in multiplayer" );
- 		return;
- 	}
+	//if ( gameLocal.isClient ) {
+ 	//	gameLocal.Warning( "Cannot switch weapons from script in multiplayer" );
+ 	//	return;
+ 	//}
 
 	weaponNum = -1;
 	for( i = 0; i < MAX_WEAPONS; i++ ) {

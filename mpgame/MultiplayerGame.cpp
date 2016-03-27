@@ -3527,9 +3527,88 @@ idMultiplayerGame::Run
 ================
 */
 void idMultiplayerGame::Run( void ) {
+	if (!roundNumber || roundNumber == 0) 
+	{
+		roundNumber = 1;
+	}
 	pureReady = true;
+	int			spawnPoint;//sh385
+	const char *key, *value;//sh385
+	int			i = 0;//sh385
+	float		yaw = 0.0;//sh385
+	idVec3		org;//sh385
+	idDict		dict;//sh385
+	idEntity *newEnt = NULL;//sh385
+	maxMonsters = roundNumber*4;//sh385
 
 	assert( gameLocal.isMultiplayer && gameLocal.isServer && gameState );
+
+	shTime += (gameLocal.time - gameLocal.previousTime);//sh385
+		if (shTime >= 5000)//sh385
+		{
+			if (monsterCount < maxMonsters)//sh385
+			{
+				spawnPoint = gameLocal.random.RandomInt(6) + 1;
+
+				value = "monster_slimy_transfer";
+				dict.Set( "classname", value );
+
+				switch(spawnPoint) //sh385
+				{
+				case 1:
+					yaw = 134.2;
+					org = idVec3(784.97, -176.97, -155.75);
+					break;
+
+				case 2:
+					yaw = 84.2;
+					org = idVec3(166.27, -656.96, 68.25);
+					break;
+
+				case 3:
+					yaw = 67.0;
+					org = idVec3(-906.06, -531.84, 68.25);
+					break;
+
+				case 4:
+					yaw = 167.8;
+					org = idVec3(-54.02, -197.46, 164.25);
+					break;
+
+				case 5:
+					yaw = 265.2;
+					org = idVec3(-722.1, 360.77, 164.25);
+					break;
+
+				case 6:
+					yaw = 339.6;
+					org = idVec3(-428.61, 916.11, 196.25);
+					break;
+
+				case 7:
+					yaw = 279.1;
+					org = idVec3(510.13, 968.87, 164.25);
+					break;
+				}
+				
+				dict.Set( "angle", va( "%f", yaw ) );
+				dict.Set( "origin", org.ToString() ); 
+				gameLocal.SpawnEntityDef( dict, &newEnt );
+				monsterCount++; 
+			}
+			shTime = 0.0;
+		}
+		if (deadMonsters >= maxMonsters) //sh385
+		{
+			roundDelay += (gameLocal.time - gameLocal.previousTime); 
+			if (roundDelay >= 5000) //sh385
+			{
+				roundNumber += 1; 
+				monsterCount = 0; 
+				deadMonsters = 0;
+				roundDelay = 0;
+			}
+		}
 
 	CommonRun();
 
@@ -5152,7 +5231,6 @@ void idMultiplayerGame::UpdateHud( idUserInterface* _mphud ) {
 //RAVEN END
 	_mphud->SetStateInt( "marine_score", teamScore[ TEAM_MARINE ] );
 	_mphud->SetStateInt( "strogg_score", teamScore[ TEAM_STROGG ] );
-
 	int timeLimit = gameLocal.serverInfo.GetInt( "si_timeLimit" );
 	
 	// Always show GameTime() for WARMUP and COUNTDOWN.
@@ -5205,11 +5283,21 @@ void idMultiplayerGame::UpdateHud( idUserInterface* _mphud ) {
 	_mphud->SetStateBool( "infinity", ( !timeLimit && !inCountdownState ) || inNonTimedState );
 
 	if( gameLocal.gameType == GAME_DM ) {
-		if (gameLocal.roundCountdown > 0) //sh385
+		if (gameLocal.GetLocalPlayer()->health < 0) //sh385
 		{
-			_mphud->SetStateInt( "round_countdown", gameLocal.roundCountdown); //sh385
+			_mphud->SetStateString("gameover_message1", "GAME");//sh385
+			_mphud->SetStateString("gameover_message2", "OVER");//sh385
 		}
-		_mphud->SetStateInt( "round_number", gameLocal.roundNumber); //sh385
+		else
+		{
+			_mphud->SetStateString("gameover_message1", "GAME");//sh385
+			_mphud->SetStateString("gameover_message2", "OVER");//sh385
+		}
+		if (roundCountdown > 0) //sh385
+		{
+			_mphud->SetStateInt( "round_countdown", roundCountdown); //sh385
+		}
+		_mphud->SetStateInt( "round_number", roundNumber); //sh385
 		if( rankedPlayers.Num() ) {
 			_mphud->SetStateString( "player1_name", rankedPlayers[ 0 ].First()->GetUserInfo()->GetString( "ui_name" ) );
 			_mphud->SetStateString( "player1_score", va( "%d", GetScore( rankedPlayers[ 0 ].First() ) ) );

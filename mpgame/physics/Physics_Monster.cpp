@@ -595,9 +595,9 @@ idPhysics_Monster::ApplyImpulse
 ================
 */
 void idPhysics_Monster::ApplyImpulse( const int id, const idVec3 &point, const idVec3 &impulse ) {
-	if ( noImpact ) {
-		return;
-	}
+	//if ( noImpact ) { sh385
+	//	return;
+	//}
 	current.velocity += impulse * invMass;
 	Activate();
 }

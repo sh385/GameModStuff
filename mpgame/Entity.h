@@ -110,7 +110,7 @@ public:
 class idEntity : public idClass {
 public:
 	static const int		MAX_PVS_AREAS = 4;
-
+	idPhysics *				physics;							// physics used for this entity 
 	int						entityNumber;			// index into the entity list
 	int						entityDefNumber;		// index into the entity def list
 
@@ -187,15 +187,14 @@ public:
 
 public:
 	ABSTRACT_PROTOTYPE( idEntity );
-
 							idEntity();
 							~idEntity();
-
+	renderEntity_t			renderEntity;						// used to present a model to the renderer sh385
 	void					Spawn( void );
 
 	void					Save( idSaveGame *savefile ) const;
 	void					Restore( idRestoreGame *savefile );
-
+	void					Event_SetSize( const idVec3 &mins, const idVec3 &maxs ); //sh385 changed to public
 	const char *			GetEntityDefName( void ) const;
 	void					SetName( const char *name );
 	const char *			GetName( void ) const;
@@ -523,7 +522,6 @@ public:
 // RAVEN END
 
 protected:
-	renderEntity_t			renderEntity;						// used to present a model to the renderer
 	int						modelDefHandle;						// handle to static renderer model
 	refSound_t				refSound;							// used to present sound to the audio engine
 	idEntityPtr< idEntity >	forwardDamageEnt;					// damage applied to the invoking object will be forwarded to this entity
@@ -531,7 +529,6 @@ protected:
 	jointHandle_t			bindJoint;							// joint bound to if unequal INVALID_JOINT
 private:
 	idPhysics_Static		defaultPhysicsObj;					// default physics object
-	idPhysics *				physics;							// physics used for this entity
 	int						bindBody;							// body bound to if unequal -1
 	idEntity *				teamMaster;							// master of the physics team
 	idEntity *				teamChain;							// next entity in physics team
@@ -615,7 +612,6 @@ protected:
 	void					Event_GetLinearVelocity( void );
 	void					Event_SetAngularVelocity( const idVec3 &velocity );
 	void					Event_GetAngularVelocity( void );
-	void					Event_SetSize( const idVec3 &mins, const idVec3 &maxs );
 	void					Event_GetSize( void );
 	void					Event_GetMins( void );
 	void					Event_GetMaxs( void );

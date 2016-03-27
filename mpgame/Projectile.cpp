@@ -107,7 +107,6 @@ void idProjectile::Spawn( void ) {
  	SetPhysics( &physicsObj );
 	prePredictTime = spawnArgs.GetInt( "predictTime", "0" );
 	syncPhysics = spawnArgs.GetBool( "net_syncPhysics", "0" );
-
 	if ( gameLocal.isClient ) {
 		Hide();
 	}
@@ -265,7 +264,6 @@ void idProjectile::Create( idEntity* _owner, const idVec3 &start, const idVec3 &
 	physicsObj.extraPassEntity = extraPassEntity;
 
 	owner = _owner;
-
 	memset( &renderLight, 0, sizeof( renderLight ) );
 	shaderName = spawnArgs.GetString( "mtr_light_shader" );
 	if ( *shaderName ) {
@@ -385,7 +383,9 @@ void idProjectile::Launch( const idVec3 &start, const idVec3 &dir, const idVec3 
 	gravity				= spawnArgs.GetFloat( "gravity" );
 	fuse				= spawnArgs.GetFloat( "fuse" ) + ( spawnArgs.GetFloat( "fuse_random", "0" ) * gameLocal.random.RandomFloat() );
 	bounceCount			= spawnArgs.GetInt( "bounce_count", "-1" );
-	
+	specialAbility	    = spawnArgs.GetString("special_ability"); //sh385
+	fuseEntity			= spawnArgs.GetString("def_fuseEntity");  //sh385
+	numOfFuses			= spawnArgs.GetInt("def_numOfFuseEntities");
 	//spawn impact entity information
 	impactEntity				= spawnArgs.GetString("def_impactEntity","");
 	numImpactEntities			= spawnArgs.GetInt("numImpactEntities","0");
@@ -554,6 +554,7 @@ void idProjectile::Think( void ) {
 			float fuse = spawnArgs.GetFloat( "fuse_atrest" );
 			if ( fuse > 0.0f ) {
 				if ( spawnArgs.GetBool( "detonate_on_fuse" ) ) {
+					
 					CancelEvents( &EV_Explode );
 					PostEventSec( &EV_Explode, fuse );
 				} else {
@@ -927,7 +928,6 @@ bool idProjectile::Collide( const trace_t &collision, const idVec3 &velocity, bo
 			}	
 // RAVEN END
  			ent->Damage( this, owner, dir, damageDefName, damagePower, hitJoint );
-			
 			if( owner && owner->IsType( idPlayer::GetClassType() ) && ent->IsType( idActor::GetClassType() ) ) {
 				statManager->WeaponHit( (const idActor*)(owner.GetEntity()), ent, methodOfDeath, hitCount == 0 );			
 				hitCount++;
@@ -1244,7 +1244,6 @@ void idProjectile::Explode( const trace_t *collision, const bool showExplodeFX, 
 	} else if ( showExplodeFX ) {
 		PlayDetonateEffect( endpos, fxDir.ToMat3() );
 	}
-
 	// Stop the fly effect without destroying particles to ensure the trail within can persist.
 	StopEffect( "fx_fly" );	
 	

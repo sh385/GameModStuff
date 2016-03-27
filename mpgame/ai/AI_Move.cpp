@@ -524,6 +524,7 @@ void idAI::SetAAS( void ) {
 	}
 	aas = gameLocal.GetAAS( use_aas );
 	if ( aas ) {
+		gameLocal.Printf("hello");
 		const idAASSettings *settings = aas->GetSettings();
 		if ( settings ) {
 			if ( !ValidForBounds( settings, physicsObj.GetBounds() ) ) {

@@ -737,7 +737,6 @@ protected:
 	*/
 
 public:
-
 	// enemy managment
 	bool					SetEnemy						( idEntity *newEnemy );
 	void					ClearEnemy						( bool dead = false );
@@ -918,7 +917,8 @@ public:
 	*/
 
 public:
-
+	virtual bool			MoveToEnemy						( void );
+	bool					StartMove						( aiMoveCommand_t command, const idVec3& goalOrigin, int goalArea, idEntity* goalEntity, aasFeature_t* feature, float range ); //sh385 made public
 	void					ScriptedMove					( idEntity* destEnt, float minDist, bool endWithIdle );
 	void					ScriptedFace					( idEntity* faceEnt, bool endWithIdle );
 	void					ScriptedAnim					( const char* animname, int blendFrames, bool loop, bool endWithIdle );
@@ -968,13 +968,12 @@ protected:
 	
 protected:
 
-	bool					StartMove						( aiMoveCommand_t command, const idVec3& goalOrigin, int goalArea, idEntity* goalEntity, aasFeature_t* feature, float range );
+	
 	void					StopMove						( moveStatus_t status );
 
 	bool					MoveTo							( const idVec3 &pos, float range = 0.0f );
 	bool					MoveToAttack					( idEntity *ent, int attack_anim );
 	bool					MoveToTether					( rvAITether* tether );
-	virtual bool			MoveToEnemy						( void );
 	bool					MoveToEntity					( idEntity *ent, float range = 0.0f );
 	bool					MoveToCover						( float minRange, float maxRange, aiTactical_t coverType );
 	bool					MoveToHide						( void );
