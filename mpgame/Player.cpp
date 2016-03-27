@@ -11489,10 +11489,10 @@ void idPlayer::Event_SelectWeapon( const char *weaponName ) {
 	int i;
 	int weaponNum;
 
-	//if ( gameLocal.isClient ) {
- 	//	gameLocal.Warning( "Cannot switch weapons from script in multiplayer" );
- 	//	return;
- 	//}
+	if ( gameLocal.isClient ) {
+ 		gameLocal.Warning( "Cannot switch weapons from script in multiplayer" );
+ 		return;
+ 	}
 
 	weaponNum = -1;
 	for( i = 0; i < MAX_WEAPONS; i++ ) {

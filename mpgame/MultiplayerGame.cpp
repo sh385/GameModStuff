@@ -5290,8 +5290,8 @@ void idMultiplayerGame::UpdateHud( idUserInterface* _mphud ) {
 		}
 		else
 		{
-			_mphud->SetStateString("gameover_message1", "GAME");//sh385
-			_mphud->SetStateString("gameover_message2", "OVER");//sh385
+			_mphud->SetStateString("gameover_message1", "GAME");
+			_mphud->SetStateString("gameover_message2", "OVER");
 		}
 		if (roundCountdown > 0) //sh385
 		{
