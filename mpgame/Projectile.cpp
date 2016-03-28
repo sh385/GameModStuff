@@ -374,7 +374,7 @@ void idProjectile::Launch( const idVec3 &start, const idVec3 &dir, const idVec3 
 	launchSpeed = temp;
 
 	spawnArgs.GetAngles( "angular_velocity", "0 0 0", angularVelocity );
-
+	ability				= spawnArgs.GetString("ability");
 	linear_friction		= spawnArgs.GetFloat( "linear_friction" );
 	angular_friction	= spawnArgs.GetFloat( "angular_friction" );
 	contact_friction	= spawnArgs.GetFloat( "contact_friction" );
@@ -383,9 +383,6 @@ void idProjectile::Launch( const idVec3 &start, const idVec3 &dir, const idVec3 
 	gravity				= spawnArgs.GetFloat( "gravity" );
 	fuse				= spawnArgs.GetFloat( "fuse" ) + ( spawnArgs.GetFloat( "fuse_random", "0" ) * gameLocal.random.RandomFloat() );
 	bounceCount			= spawnArgs.GetInt( "bounce_count", "-1" );
-	specialAbility	    = spawnArgs.GetString("special_ability"); //sh385
-	fuseEntity			= spawnArgs.GetString("def_fuseEntity");  //sh385
-	numOfFuses			= spawnArgs.GetInt("def_numOfFuseEntities");
 	//spawn impact entity information
 	impactEntity				= spawnArgs.GetString("def_impactEntity","");
 	numImpactEntities			= spawnArgs.GetInt("numImpactEntities","0");
@@ -917,6 +914,10 @@ bool idProjectile::Collide( const trace_t &collision, const idVec3 &velocity, bo
 			if ( ent->IsType(idActor::GetClassType()) )
 			{
 				idActor* entActor = static_cast<idActor*>(ent);
+				if (ability == "tag") //sh385
+				{
+					gameLocal.GetLocalPlayer()->enemy = entActor; 
+				}
 				if ( entActor && entActor->GetHead() && entActor->GetHead()->IsType(idAFAttachment::GetClassType()) )
 				{
 					idAFAttachment* headEnt = static_cast<idAFAttachment*>(entActor->GetHead());
@@ -1902,8 +1903,8 @@ void idGuidedProjectile::Launch( const idVec3 &start, const idVec3 &dir, const i
 	launchTime = gameLocal.GetTime();
 
 	if ( owner.GetEntity() ) {
-		if ( owner.GetEntity()->IsType( idAI::GetClassType() ) ) {
-			GuideTo ( static_cast<idAI *>( owner.GetEntity() )->GetEnemy() );
+		if ( owner.GetEntity()->IsType( idPlayer::GetClassType() ) ) {
+			GuideTo ( static_cast<idPlayer *>( owner.GetEntity() )->enemy); 
 		}
 	}
 

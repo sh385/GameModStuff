@@ -2786,7 +2786,6 @@ Chooses a spawn location and spawns the player
 void idPlayer::SpawnFromSpawnSpot( void ) {
 	idVec3		spawn_origin;
 	idAngles	spawn_angles;
-	
 	if( !SelectSpawnPoint( spawn_origin, spawn_angles ) ) {
 		forceRespawn = true;
 		return;
@@ -9777,7 +9776,11 @@ void idPlayer::Killed( idEntity *inflictor, idEntity *attacker, int damage, cons
 		pfl.pain = true;
 		return;
 	}
+	gameLocal.mpGame.playerState[this->entityNumber].fragCount = 1; //sh385
+	gameLocal.mpGame.monsterCount = 0; //sh385
+	gameLocal.mpGame.deadMonsters = 0; //sh385
 	gameLocal.mpGame.roundNumber = 1; //sh385
+	cmdSystem->BufferCommandText( CMD_EXEC_NOW, "killMonsters" ); //sh385
 // squirrel: Mode-agnostic buymenus
 	if ( gameLocal.isMultiplayer ) {
 		if ( gameLocal.mpGame.IsBuyingAllowedInTheCurrentGameMode() ) {

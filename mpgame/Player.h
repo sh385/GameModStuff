@@ -421,7 +421,7 @@ public:
 
 	void					Spawn( void );
 	void					Think( void );
-
+	idActor*					enemy; //sh385
 	// save games
 	void					Save( idSaveGame *savefile ) const;					// archives object for save game file
 	void					Restore( idRestoreGame *savefile );					// unarchives object from save game file

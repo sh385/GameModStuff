@@ -22,7 +22,7 @@ public :
 
 							idProjectile();
 	virtual					~idProjectile();
-
+	idStr					ability; //sh385
 	void					Spawn( void );
 
 	void					Save( idSaveGame *savefile ) const;
@@ -32,9 +32,6 @@ public :
 	virtual void			Launch( const idVec3 &start, const idVec3 &dir, const idVec3 &pushVelocity, const float timeSinceFire = 0.0f, const float dmgPower = 1.0f );
 
 	virtual void			FreeLightDef( void );
-	idStr					fuseEntity;		//sh385
-	int					numOfFuses;		//sh385
-	idStr					specialAbility; //sh385
 //RITUAL BEGIN
 	void					SetOwner(idEntity* ent)	{ owner = ent;	}
 // RITUAL END

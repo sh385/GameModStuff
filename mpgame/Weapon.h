@@ -127,7 +127,6 @@ public:
 		EVENT_CHANGESKIN,
 		EVENT_MAXEVENTS
 	};
-	idStr				specialAbility; //sh385
 	void				Init						( idPlayer* _owner, const idDeclEntityDef* def, int weaponIndex, bool isStrogg = false );
 	
 	// Virtual overrides

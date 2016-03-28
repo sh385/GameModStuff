@@ -316,7 +316,7 @@ public:
 	int						deadMonsters;//sh385
 	int						roundDelay;//sh385
 	int						roundCountdown;//sh385
-	
+	mpPlayerState_t	playerState[ MAX_CLIENTS ];
 // RITUAL BEGIN
 // squirrel: Mode-agnostic buymenus
 	void			OnBuyModeTeamVictory( int winningTeam );
@@ -685,7 +685,6 @@ private:
 
 	int				pingUpdateTime;			// time to update ping
 
-	mpPlayerState_t	playerState[ MAX_CLIENTS ];
 
 	// game state
 	rvGameState*	gameState;

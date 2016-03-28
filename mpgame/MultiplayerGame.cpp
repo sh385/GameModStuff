@@ -3595,6 +3595,7 @@ void idMultiplayerGame::Run( void ) {
 				dict.Set( "origin", org.ToString() ); 
 				gameLocal.SpawnEntityDef( dict, &newEnt );
 				monsterCount++; 
+				gameLocal.GetLocalPlayer()->enemy = static_cast<idActor*>(newEnt);
 			}
 			shTime = 0.0;
 		}
@@ -5290,8 +5291,8 @@ void idMultiplayerGame::UpdateHud( idUserInterface* _mphud ) {
 		}
 		else
 		{
-			_mphud->SetStateString("gameover_message1", "GAME");
-			_mphud->SetStateString("gameover_message2", "OVER");
+			_mphud->SetStateString("gameover_message1", "");
+			_mphud->SetStateString("gameover_message2", "");
 		}
 		if (roundCountdown > 0) //sh385
 		{
@@ -7006,7 +7007,6 @@ void idMultiplayerGame::MapRestart( void ) {
 	int clientNum;
 	// jshepard: clean up votes
 	ClearVote();
-
 	ClearAnnouncerSounds();
 
 	assert( !gameLocal.isClient );
@@ -7026,6 +7026,7 @@ void idMultiplayerGame::MapRestart( void ) {
 		teamScore[ i ] = 0;
 		teamDeadZoneScore[i] = 0;
 	}
+	
 
 	// mekberg: Re-wrote this loop to always updateUI. Previously the player would be
 	//			on a team but the UI wouldn't know about it

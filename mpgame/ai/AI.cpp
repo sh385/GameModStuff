@@ -1626,6 +1626,10 @@ void idAI::Killed( idEntity *inflictor, idEntity *attacker, int damage, const id
 	idPlayer *player = gameLocal.GetLocalPlayer(); //sh385
 	gameLocal.mpGame.AddPlayerScore(player, 10); //sh385
 	gameLocal.mpGame.deadMonsters+=1; //sh385
+	if (player->enemy == this) //sh385
+	{
+		player->enemy = NULL;
+	}
 
 	aifl.dead = true;
 
